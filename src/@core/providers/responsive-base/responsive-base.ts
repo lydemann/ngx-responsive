@@ -4,14 +4,20 @@
  *
  * @license MIT
  */
-import { EventEmitter, TemplateRef, ViewContainerRef, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+    EventEmitter,
+    TemplateRef,
+    ViewContainerRef,
+    OnInit,
+    OnDestroy,
+    ChangeDetectorRef,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IResponsiveSubscriptions } from '../../interfaces';
 import { ResponsiveState } from '../responsive-state/responsive-state';
 import { PlatformService } from '../platform-service/platform.service';
 
 export abstract class RESPONSIVE_BASE<T> implements OnInit, OnDestroy {
-
     private _noRepeat = 0;
     private _sizes_grid_state: any;
     private _others_grid_state: string[];
@@ -36,19 +42,15 @@ export abstract class RESPONSIVE_BASE<T> implements OnInit, OnDestroy {
         orientation: false,
         standard: false,
         ie: false,
-        sizes: false
+        sizes: false,
     };
-    private isEnabledForPlatform: boolean;
-
     constructor(
         private templateRef: TemplateRef<any>,
         private viewContainer: ViewContainerRef,
         private _responsiveState: ResponsiveState,
         private cd: ChangeDetectorRef,
-        platformService: PlatformService
-    ) {
-        this.isEnabledForPlatform = platformService.isEnabledForPlatform();
-    }
+        private platformService: PlatformService
+    ) {}
 
     protected eventChanges: EventEmitter<any> = new EventEmitter();
     protected setGrid(grid_state: any, directive: string): void {
@@ -82,52 +84,66 @@ export abstract class RESPONSIVE_BASE<T> implements OnInit, OnDestroy {
         if (directive === 'sizes') {
             this._sizes_grid_state = grid_state;
         } else {
-            this._others_grid_state = <string[]>(Array.isArray(grid_state) ? grid_state : [grid_state]);
+            this._others_grid_state = <string[]>(
+                (Array.isArray(grid_state) ? grid_state : [grid_state])
+            );
         }
         this._directive = directive;
     }
 
     public ngOnInit() {
-        if (this.isEnabledForPlatform) {
+        if (this.platformService.isEnabledForPlatform()) {
             if (this.set_active_subscriptions.bootstrap) {
-                this._subscription_Bootstrap = this._responsiveState.elemento$.subscribe(this.updateView.bind(this));
-            }
-
-            if (this.set_active_subscriptions.bootstrap) {
-                this._subscription_Bootstrap = this._responsiveState.elemento$.subscribe(this.updateView.bind(this));
+                this._subscription_Bootstrap = this._responsiveState.elemento$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
 
             if (this.set_active_subscriptions.browser) {
-                this._subscription_Browser = this._responsiveState.browser$.subscribe(this.updateView.bind(this));
+                this._subscription_Browser = this._responsiveState.browser$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
             if (this.set_active_subscriptions.device) {
-                this._subscription_Device = this._responsiveState.device$.subscribe(this.updateView.bind(this));
+                this._subscription_Device = this._responsiveState.device$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
 
             if (this.set_active_subscriptions.pixelratio) {
-                this._subscription_Pixel_Ratio = this._responsiveState.pixel$.subscribe(this.updateView.bind(this));
+                this._subscription_Pixel_Ratio = this._responsiveState.pixel$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
 
             if (this.set_active_subscriptions.orientation) {
-                this._subscription_Orientation = this._responsiveState.orientation$.subscribe(this.updateView.bind(this));
+                this._subscription_Orientation = this._responsiveState.orientation$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
 
             if (this.set_active_subscriptions.standard) {
-                this._subscription_Standard = this._responsiveState.standard$.subscribe(this.updateView.bind(this));
+                this._subscription_Standard = this._responsiveState.standard$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
 
             if (this.set_active_subscriptions.ie) {
-                this._subscription_IE_Version = this._responsiveState.ieVersion$.subscribe(this.updateView.bind(this));
+                this._subscription_IE_Version = this._responsiveState.ieVersion$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
 
             if (this.set_active_subscriptions.sizes) {
-                this._subscription_custom_sizes = this._responsiveState.ancho$.subscribe(this.updateView.bind(this));
+                this._subscription_custom_sizes = this._responsiveState.ancho$.subscribe(
+                    this.updateView.bind(this)
+                );
             }
         }
     }
 
     public ngOnDestroy() {
-        if (this.isEnabledForPlatform) {
+        if (this.platformService.isEnabledForPlatform()) {
             if (this.set_active_subscriptions.bootstrap) {
                 this._subscription_Bootstrap.unsubscribe();
             }
@@ -163,7 +179,7 @@ export abstract class RESPONSIVE_BASE<T> implements OnInit, OnDestroy {
     }
 
     private showHide(show: boolean): void {
-        if (this.isEnabledForPlatform) {
+        if (this.platformService.isEnabledForPlatform()) {
             if (show) {
                 if (this._noRepeat === 0) {
                     this._noRepeat = 1;
@@ -181,12 +197,14 @@ export abstract class RESPONSIVE_BASE<T> implements OnInit, OnDestroy {
     }
 
     private updateView(value: any): void {
-        const showBoolean = this._directive === 'sizes' ?
-            (
-                (typeof this._sizes_grid_state.min === 'undefined' || value >= this._sizes_grid_state.min) &&
-                (typeof this._sizes_grid_state.max === 'undefined' || value <= this._sizes_grid_state.max)
-            ) :
-            !!this._others_grid_state && this._others_grid_state.indexOf(value) !== -1;
+        const showBoolean =
+            this._directive === 'sizes'
+                ? (typeof this._sizes_grid_state.min === 'undefined' ||
+                      value >= this._sizes_grid_state.min) &&
+                  (typeof this._sizes_grid_state.max === 'undefined' ||
+                      value <= this._sizes_grid_state.max)
+                : !!this._others_grid_state &&
+                  this._others_grid_state.indexOf(value) !== -1;
 
         this.showHide(this._showWhenTrue ? showBoolean : !showBoolean);
     }
