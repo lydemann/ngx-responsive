@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
-  "name": "ngx-responsive",
-  "version": "9.0.0",
+  "name": "@lydemann/ngx-responsive",
+  "version": "9.0.1",
   "description": "Superset of RESPONSIVE DIRECTIVES to show or hide items according to the size of the device screen and another features in Angular 9",
   "scripts": {
     "start": "ng serve --aot",
@@ -50,17 +50,7 @@
     "universal",
     "directives"
   ],
-  "author": "Manu Cutillas <manucutillas@outlook.com>",
-  "contributors": [
-    "Christophe HOARAU (https://github.com/no-more)",
-    "Kamil Breguła (https://github.com/mik-laj)",
-    "Janne Julkunen (https://github.com/sconix)",
-    "paulyipkh (https://github.com/paulyipkh)",
-    "mburger81 (https://github.com/mburger81)",
-    "Alyssa Brunswick (https://github.com/alyssabrunswick)",
-    "Quentin (https://github.com/bobbybobby)",
-    "Thomas Christensen (https://github.com/tocDK)"
-  ],
+  "author": "Christian Lüdemann <christian@christianlydemann.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ManuCutillas/ngx-responsive/issues"
